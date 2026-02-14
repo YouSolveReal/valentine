@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Be My Valentine 💕</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #ffecd2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts animation */
+        .heart-bg {
+            position: fixed;
+            font-size: 30px;
+            opacity: 0.3;
+            animation: float 15s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ff1744;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-big {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .question {
+            font-size: 1.8em;
+            color: #d81b60;
+            margin: 30px 0;
+            font-weight: bold;
+        }
+
+        .button-container {
+            position: relative;
+            margin-top: 40px;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        button {
+            padding: 20px 50px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%);
+            color: white;
+            position: relative;
+        }
+
+        #noBtn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #yesBtn:hover {
+            background: linear-gradient(135deg, #ff8fab 0%, #d07a95 100%);
+        }
+
+        .sad-message {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #ffe0e0;
+            border-radius: 15px;
+            border-left: 5px solid #ff1744;
+        }
+
+        .sad-emoji {
+            font-size: 60px;
+            margin: 10px 0;
+        }
+
+        .sad-text {
+            font-size: 1.3em;
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .success-screen {
+            display: none;
+        }
+
+        .love-quote {
+            font-size: 1.2em;
+            color: #d81b60;
+            font-style: italic;
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 15px;
+        }
+
+        .calculator-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        input {
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #ff6b9d;
+            border-radius: 25px;
+            margin: 10px;
+            width: 80%;
+            text-align: center;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #c06c84;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff1f1 0%, #ffe5e5 100%);
+            border-radius: 20px;
+            display: none;
+        }
+
+        .percentage {
+            font-size: 4em;
+            color: #ff1744;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-message {
+            font-size: 1.3em;
+            color: #d81b60;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .question {
+                font-size: 1.3em;
+            }
+            button {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
+        }
+
+        .developer-credit {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            color: #d81b60;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .countdown-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffe5e5 0%, #fff0f0 100%);
+            border-radius: 20px;
+            border: 2px dashed #ff6b9d;
+        }
+
+        .countdown-title {
+            font-size: 1.3em;
+            color: #d81b60;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .date-input-container {
+            margin: 20px 0;
+        }
+
+        .date-input {
+            padding: 12px 20px;
+            font-size: 1em;
+            border: 2px solid #ff6b9d;
+            border-radius: 15px;
+            margin: 10px;
+            width: auto;
+            text-align: center;
+            outline: none;
+        }
+
+        .countdown-display {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .countdown-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .countdown-item {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown-value {
+            font-size: 2.5em;
+            color: #ff1744;
+            font-weight: bold;
+        }
+
+        .countdown-label {
+            font-size: 0.9em;
+            color: #d81b60;
+            margin-top: 5px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #7b8eeb 0%, #8a5ab3 100%);
+        }
+
+        .certificate {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .certificate-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+        }
+
+        .certificate-border {
+            border: 5px double #ff6b9d;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            position: relative;
+        }
+
+        .certificate-border::before {
+            content: '💕';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2em;
+        }
+
+        .certificate-border::after {
+            content: '💕';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2em;
+        }
+
+        .certificate-title {
+            font-size: 2.5em;
+            color: #ff1744;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .certificate-content {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+
+        .certificate-percentage {
+            font-size: 4em;
+            color: #ff1744;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .certificate-footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .certificate.show {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            padding: 0;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff1744;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .secret-story-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 2em;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .secret-story-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+            }
+            50% {
+                box-shadow: 0 5px 30px rgba(245, 87, 108, 0.8);
+            }
+        }
+
+        .story-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .story-content {
+            max-width: 800px;
+            margin: 50px auto;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: storySlideIn 0.5s ease-out;
+        }
+
+        @keyframes storySlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .story-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #ff6b9d;
+            padding-bottom: 20px;
+        }
+
+        .story-title {
+            font-size: 2.5em;
+            color: #ff1744;
+            font-family: 'Georgia', serif;
+            margin-bottom: 10px;
+        }
+
+        .story-subtitle {
+            font-size: 1.2em;
+            color: #d81b60;
+            font-style: italic;
+        }
+
+        .story-body {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .story-section {
+            margin: 30px 0;
+        }
+
+        .story-section h3 {
+            font-size: 1.8em;
+            color: #ff1744;
+            margin-bottom: 15px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-section p {
+            margin: 15px 0;
+        }
+
+        .story-section ul {
+            list-style: none;
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        .story-section ul li {
+            margin: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .story-section ul li::before {
+            content: '💕';
+            position: absolute;
+            left: 0;
+        }
+
+        .story-highlight {
+            background: rgba(255, 107, 157, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #d81b60;
+        }
+
+        .story-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5em;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-close-btn:hover {
+            color: #ff1744;
+            transform: rotate(90deg);
+        }
+
+        .story-carousel {
+            margin: 30px 0;
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff1744;
+        }
+
+        .carousel-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-btn-prev {
+            left: 10px;
+        }
+
+        .carousel-btn-next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .carousel-dot.active {
+            background: #ff1744;
+            transform: scale(1.3);
+            border-color: #ffc0cb;
+        }
+
+        .carousel-dot:hover {
+            background: #ff6b9d;
+        }
+
+        .carousel-counter {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .story-content {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+            .story-title {
+                font-size: 1.8em;
+            }
+            .story-body {
+                font-size: 1em;
+            }
+            .secret-story-btn {
+                bottom: 70px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5em;
+            }
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .certificate {
+                padding: 30px 20px;
+            }
+            .certificate-title {
+                font-size: 1.8em;
+            }
+            .countdown-value {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="questionScreen">
+            <h1>💕 Happy Valentine's Day! 💕</h1>
+            <div class="emoji-big">💖</div>
+            <p class="question">Will you be my Valentine? 🌹</p>
+            
+            <div class="button-container">
+                <button id="yesBtn" onclick="moveNoButton()">Yes! 💕</button>
+                <button id="noBtn" onclick="handleNo()">No</button>
+            </div>
+
+            <div class="sad-message" id="sadMessage">
+                <div class="sad-emoji" id="sadEmoji">😢</div>
+                <p class="sad-text" id="sadText">Please... give me a chance! 🥺</p>
+            </div>
+        </div>
+
+        <div class="success-screen" id="successScreen">
+            <h1>🎉 Yay! You said YES! 🎉</h1>
+            <div class="emoji-big">😍💕✨</div>
+
+            <div class="calculator-section" id="calculatorSection">
+                <h2 style="color: #ff1744; margin: 20px 0;">💘 Love Calculator 💘</h2>
+                <input type="text" id="name1" placeholder="Enter your name 💕" maxlength="30">
+                <input type="text" id="name2" placeholder="Enter their name 💕" maxlength="30">
+                <button class="calculate-btn" onclick="calculateLove()">Calculate Love! 💖</button>
+
+                <div class="result" id="result">
+                    <div class="percentage" id="percentage">0%</div>
+                    <div class="result-message" id="resultMessage"></div>
+                    <div style="font-size: 3em; margin-top: 10px;" id="resultEmoji">💕</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="download-btn" onclick="showCertificate()">📜 Generate Certificate</button>
+                </div>
+            </div>
+
+            <div class="countdown-section">
+                <div class="countdown-title">⏰ Relationship Countdown ⏰</div>
+                <p style="color: #666; margin: 10px 0;">Choose what you want to count:</p>
+                
+                <div class="date-input-container">
+                    <div id="togetherInput" style="margin-top: 20px;">
+                        <p style="color: #d81b60; margin-bottom: 10px;">When did you start dating?</p>
+                        <input type="date" id="startDate" class="date-input">
+                        <button class="calculate-btn" onclick="calculateDaysTogether()" style="padding: 12px 30px; font-size: 1em;">
+                            💑 Calculate Days Together
+                        </button>
+                    </div>
+                </div>
+
+                <div class="countdown-display" id="countdownDisplay">
+                    <div class="countdown-numbers" id="countdownNumbers"></div>
+                    <p id="countdownMessage" style="font-size: 1.2em; color: #d81b60; font-weight: bold; margin-top: 15px;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="certificate-overlay" id="certificateOverlay" onclick="closeCertificate()"></div>
+    <div class="certificate" id="certificate">
+        <button class="close-btn" onclick="closeCertificate()">×</button>
+        <div class="certificate-border" id="certificateContent">
+            <div class="certificate-title">💕 Love Certificate 💕</div>
+            <div style="font-size: 3em; margin: 20px 0;">💖✨💝</div>
+            <div class="certificate-content">
+                This is to certify that
+                <div style="font-size: 1.5em; color: #ff1744; margin: 15px 0; font-weight: bold;" id="certName1"></div>
+                and
+                <div style="font-size: 1.5em; color: #ff1744; margin: 15px 0; font-weight: bold;" id="certName2"></div>
+                share a beautiful connection of
+            </div>
+            <div class="certificate-percentage" id="certPercentage">0%</div>
+            <div class="certificate-content">
+                love compatibility! 💕
+            </div>
+            <div class="certificate-footer">
+                Issued on Valentine's Day 2026<br>
+                💝 May your love grow stronger every day 💝
+            </div>
+        </div>
+        <div style="margin-top: 20px;">
+            <button class="download-btn" onclick="downloadCertificate()">💾 Download as Image</button>
+        </div>
+    </div>
+
+    <div class="developer-credit">
+        💻 Developed by: YSR 💻
+    </div>
+
+    <button class="secret-story-btn" onclick="openStory()" title="Click for a secret story! 📖">
+        📖
+    </button>
+
+    <div class="story-modal" id="storyModal">
+        <div class="story-content">
+            <button class="story-close-btn" onclick="closeStory()">×</button>
+            
+            <div class="story-header">
+                <div class="story-title">✨ Our Family's Journey ✨</div>
+                <div class="story-subtitle">A Love Story Across Oceans</div>
+            </div>
+
+            <div class="story-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide active">
+                        <img src="images/1.jpg" alt="Finally wish Together! Family reunion at airport">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/2.jpg" alt="USA Night Time and Nepal Day Time - Time zones">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/3.jpg" alt="Time Zone Trouble - Missing calls">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/4.jpg" alt="Happy New Home - Missing Babu">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/5.jpg" alt="Family together in the park">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/6.jpg" alt="No calls - So busy waiting">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/7.jpg" alt="Traveling the World - Nepal to USA">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/9.jpg" alt="Bye Bye - Journey begins">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/10.jpg" alt="Mother and daughters in Nepal">
+                    </div>
+
+                    <button class="carousel-btn carousel-btn-prev" onclick="changeSlide(-1)">❮</button>
+                    <button class="carousel-btn carousel-btn-next" onclick="changeSlide(1)">❯</button>
+                </div>
+
+                <div class="carousel-indicators" id="carouselIndicators"></div>
+                <div class="carousel-counter" id="carouselCounter">1 / 9</div>
+            </div>
+
+            <div class="story-body">
+                <div class="story-section">
+                    <h3>🌍 The Great Journey Begins</h3>
+                    <p>Once upon a time, your <span class="story-highlight">Mommy</span> (that's me!) had to go on a very important adventure. I flew across the giant blue ocean to a place called America. I came here to learn how to help even more people and to build a cozy new nest for our whole family.</p>
+                    <p>But distance is such a tricky thing! While your <span class="story-highlight">Babu</span> was waking up to see the sun rising over the beautiful Himalayas, Mommy was just finishing her long day at the hospital, watching the moon come out in the American sky.</p>
+                </div>
+
+                <div class="story-section">
+                    <h3>📱 The Mystery of the Missing Calls</h3>
+                    <p>Because of the "Time Zone Monster," things got really confusing for Babu and me.</p>
+                    <ul>
+                        <li><strong>In Nepal:</strong> Your Babu would sit in his office, wearing his favorite blue SONAM t-shirt, looking at his phone. "Why isn't Mommy calling?" he'd wonder, feeling sad and lonely.</li>
+                        <li><strong>In America:</strong> I was racing through hospital hallways, helping patients, studying for my big exams, or trying to put you two sleepy girls to bed in a room filled with half-unpacked boxes and toys everywhere!</li>
+                    </ul>
+                    <p>Sometimes, when Babu finally called, I was so tired that I would fall asleep right in the middle of talking! Babu thought I was upset with him, and I thought Babu didn't understand how hard I was trying. We had little misunderstandings—like two people trying to dance together while being in different rooms, miles and miles apart.</p>
+                    <p>I felt like I was juggling a thousand plates at once: my nursing exams, finding us a perfect home, making sure you girls were happy and fed, and keeping our family's love strong across the ocean.</p>
+                </div>
+
+                <div class="story-section">
+                    <h3>💪 Building the Dream Together (Apart)</h3>
+                    <p>But Babu and I didn't give up on each other. We decided to use our "magic windows"—video calls—to stay close, even when the distance felt too big.</p>
+                    <ul>
+                        <li><strong>The Big Exam:</strong> When Mommy had to take her important nursing test, your Babu stayed up super late in Nepal, even though he was so sleepy, just to cheer for me and send me courage. When I passed, we all danced together through the screen! Your Babu was so proud of me!</li>
+                        <li><strong>The Apartment Hunt:</strong> I would walk through empty apartments here in North Carolina, holding my phone up so Babu could see everything. "Do you like this kitchen, Babu? Should the girls have the room with the big window?" Even though we were thousands of miles apart, Babu and I picked out our new home together—every room, every corner.</li>
+                    </ul>
+                </div>
+
+                <div class="story-section">
+                    <h3>⭐ The Wishes That Waited</h3>
+                    <p>There were so many nights when I looked up at the stars and wished your Babu was here—to help clean up the messy rooms, to share a warm cup of tea after a long day, or just to hold my hand. There were birthdays and festivals where we all wished we could hug for real instead of hugging a cold screen.</p>
+                    <p>Some wishes took a long time to come true, and that was okay—because Babu and I were saving all our love and patience for the biggest wish of all: to be together again as a family.</p>
+                </div>
+
+                <div class="story-section">
+                    <h3>✈️ The Grand Reunion</h3>
+                    <p>Years passed. My little one, you grew into a playful, curious 4-year-old. And my big girl, you became a wise, wonderful 12-year-old. Then came the most magical day of all—the day at the airport!</p>
+                    <p>I stood by the gate with both of you, my heart beating like a drum. Suddenly, I saw it in the distance—that familiar <span class="story-highlight">blue SONAM t-shirt!</span> It was your Babu! We ran, and Babu ran, and you girls ran as fast as your little legs could carry you.</p>
+                    <p>When we finally wrapped our arms around each other, that invisible golden thread that had kept our hearts connected across continents finally pulled us all into the same wonderful moment. We realized that through all the busy hours, the silent phones, the tired nights, and the confusing time zones—we had never truly been apart. We were always living in each other's hearts.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px; font-size: 3em;">
+                    👨‍👩‍👧‍👧 💖 ✨
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        const sadEmojis = ['😢', '😭', '🥺', '😞', '💔', '😔', '😩', '😫'];
+        const sadMessages = [
+            "Please... give me a chance! 🥺",
+            "My heart is breaking... 💔",
+            "I'll be so sad without you... 😭",
+            "Just one chance, please? 🥹",
+            "You're breaking my heart... 😢",
+            "I promise to make you happy! 💕",
+            "Don't leave me hanging... 😔",
+            "Pretty please with a cherry on top? 🍒"
+        ];
+
+        // Create floating hearts background
+        function createFloatingHearts() {
+            const hearts = ['💕', '💖', '💗', '💝', '💞', '💓'];
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-bg';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                document.body.appendChild(heart);
+            }
+        }
+
+        createFloatingHearts();
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.button-container');
+            
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            const maxX = containerRect.width - btnRect.width - 20;
+            const maxY = containerRect.height - btnRect.height - 20;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        function handleNo() {
+            noClickCount++;
+            const sadMessage = document.getElementById('sadMessage');
+            const sadEmoji = document.getElementById('sadEmoji');
+            const sadText = document.getElementById('sadText');
+            
+            sadMessage.style.display = 'block';
+            sadEmoji.textContent = sadEmojis[noClickCount % sadEmojis.length];
+            sadText.textContent = sadMessages[noClickCount % sadMessages.length];
+
+            if (noClickCount >= 8) {
+                // After 8 clicks, let them click Yes
+                document.getElementById('noBtn').style.display = 'none';
+                document.getElementById('yesBtn').onclick = handleYes;
+                sadText.textContent = "Okay... fine... I give up... 😔 Just click Yes if you change your mind...";
+            }
+        }
+
+        document.getElementById('yesBtn').addEventListener('click', function(e) {
+            // Only trigger if No button is hidden (after iterations)
+            if (document.getElementById('noBtn').style.display === 'none') {
+                handleYes();
+            }
+        });
+
+        function handleYes() {
+            document.getElementById('questionScreen').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+            document.getElementById('calculatorSection').style.display = 'block';
+            
+            // Confetti effect
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const confettiEmojis = ['💕', '💖', '💗', '💝', '💞', '💓', '✨', '🎉', '🎊', '💐', '🌹'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'heart-bg';
+                confetti.textContent = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-50px';
+                confetti.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function calculateLove() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            
+            if (!name1 || !name2) {
+                alert('Please enter both names! 💕');
+                return;
+            }
+
+            // Calculate "love percentage" based on names
+            const combined = (name1 + name2).toLowerCase();
+            let hash = 0;
+            for (let i = 0; i < combined.length; i++) {
+                hash = combined.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            
+            // Ensure percentage is between 60-99 for positive results
+            let percentage = Math.abs(hash % 40) + 60;
+            
+            // Display result with animation
+            const resultDiv = document.getElementById('result');
+            const percentageDiv = document.getElementById('percentage');
+            const messageDiv = document.getElementById('resultMessage');
+            const emojiDiv = document.getElementById('resultEmoji');
+            
+            resultDiv.style.display = 'block';
+            
+            // Animate percentage counting up
+            let currentPercentage = 0;
+            const interval = setInterval(() => {
+                currentPercentage++;
+                percentageDiv.textContent = currentPercentage + '%';
+                
+                if (currentPercentage >= percentage) {
+                    clearInterval(interval);
+                    displayResult(percentage, messageDiv, emojiDiv, name1, name2);
+                }
+            }, 20);
+        }
+
+        function displayResult(percentage, messageDiv, emojiDiv, name1, name2) {
+            let message = '';
+            let emoji = '';
+            
+            if (percentage >= 90) {
+                message = `${name1} and ${name2} are a PERFECT match! 💯 You two are meant to be together! 🎯`;
+                emoji = '😍💖✨';
+            } else if (percentage >= 80) {
+                message = `${name1} and ${name2} have an AMAZING connection! 💕 Love is in the air!`;
+                emoji = '🥰💝💫';
+            } else if (percentage >= 70) {
+                message = `${name1} and ${name2} are a GREAT match! 💗 Keep the love growing!`;
+                emoji = '😊💕🌹';
+            } else {
+                message = `${name1} and ${name2} have a GOOD connection! 💖 Love can always grow stronger!`;
+                emoji = '😌💓🌸';
+            }
+            
+            messageDiv.textContent = message;
+            emojiDiv.textContent = emoji;
+        }
+
+        // Countdown Timer Functions
+        function calculateDaysTogether() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const today = new Date();
+            
+            if (!document.getElementById('startDate').value) {
+                alert('Please select a date! 💕');
+                return;
+            }
+
+            if (startDate > today) {
+                alert('The date cannot be in the future! 😊');
+                return;
+            }
+
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            const days = Math.floor((diffDays % 365) % 30);
+            const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            displayCountdown(years, months, days, hours, 'together');
+        }
+
+        function displayCountdown(years, months, days, hours, type) {
+            const displayDiv = document.getElementById('countdownDisplay');
+            const numbersDiv = document.getElementById('countdownNumbers');
+            const messageDiv = document.getElementById('countdownMessage');
+            
+            displayDiv.style.display = 'block';
+            numbersDiv.innerHTML = '';
+
+            if (years > 0) {
+                numbersDiv.innerHTML += `
+                    <div class="countdown-item">
+                        <div class="countdown-value">${years}</div>
+                        <div class="countdown-label">${years === 1 ? 'Year' : 'Years'}</div>
+                    </div>
+                `;
+            }
+            if (months > 0 || years > 0) {
+                numbersDiv.innerHTML += `
+                    <div class="countdown-item">
+                        <div class="countdown-value">${months}</div>
+                        <div class="countdown-label">${months === 1 ? 'Month' : 'Months'}</div>
+                    </div>
+                `;
+            }
+            numbersDiv.innerHTML += `
+                <div class="countdown-item">
+                    <div class="countdown-value">${days}</div>
+                    <div class="countdown-label">${days === 1 ? 'Day' : 'Days'}</div>
+                </div>
+            `;
+
+            const totalDays = years * 365 + months * 30 + days;
+            messageDiv.textContent = `You've been together for ${totalDays} amazing days! 💕`;
+        }
+
+        // Certificate Functions
+        let savedPercentage = 0;
+        let savedName1 = '';
+        let savedName2 = '';
+
+        function showCertificate() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            const percentage = document.getElementById('percentage').textContent;
+
+            if (!name1 || !name2 || percentage === '0%') {
+                alert('Please calculate your love percentage first! 💕');
+                return;
+            }
+
+            savedName1 = name1;
+            savedName2 = name2;
+            savedPercentage = percentage;
+
+            document.getElementById('certName1').textContent = name1;
+            document.getElementById('certName2').textContent = name2;
+            document.getElementById('certPercentage').textContent = percentage;
+
+            const overlay = document.getElementById('certificateOverlay');
+            const certificate = document.getElementById('certificate');
+            
+            overlay.style.display = 'block';
+            certificate.style.display = 'block';
+            
+            // Add animation class after display
+            setTimeout(() => {
+                certificate.classList.add('show');
+            }, 10);
+            
+            // Prevent body scroll when certificate is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCertificate() {
+            const overlay = document.getElementById('certificateOverlay');
+            const certificate = document.getElementById('certificate');
+            
+            certificate.classList.remove('show');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                certificate.style.display = 'none';
+            }, 300);
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        function downloadCertificate() {
+            // Create a canvas to draw the certificate
+            const certificate = document.getElementById('certificateContent');
+            
+            // Use html2canvas library (we'll add it via CDN)
+            html2canvas(certificate, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false
+            }).then(canvas => {
+                // Convert canvas to image and download
+                const link = document.createElement('a');
+                link.download = `love-certificate-${savedName1}-${savedName2}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Story Modal Functions
+        function openStory() {
+            const storyModal = document.getElementById('storyModal');
+            storyModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            initializeCarousel();
+        }
+
+        function closeStory() {
+            const storyModal = document.getElementById('storyModal');
+            storyModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close story when clicking outside the content
+        document.getElementById('storyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeStory();
+            }
+        });
+
+        // Carousel Functions
+        let currentSlide = 0;
+        const totalSlides = 9;
+
+        function initializeCarousel() {
+            // Create indicator dots
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+            indicatorsContainer.innerHTML = '';
+            
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(i);
+                indicatorsContainer.appendChild(dot);
+            }
+        }
+
+        function showSlide(n) {
+            const slides = document.getElementsByClassName('carousel-slide');
+            const dots = document.getElementsByClassName('carousel-dot');
+            const counter = document.getElementById('carouselCounter');
+
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+
+            // Hide all slides
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+
+            // Remove active class from all dots
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove('active');
+            }
+
+            // Show current slide
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation for carousel
+        document.addEventListener('keydown', function(e) {
+            const storyModal = document.getElementById('storyModal');
+            if (storyModal.style.display === 'block') {
+                if (e.key === 'ArrowLeft') {
+                    changeSlide(-1);
+                } else if (e.key === 'ArrowRight') {
+                    changeSlide(1);
+                } else if (e.key === 'Escape') {
+                    closeStory();
+                }
+            }
+        });
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.querySelector('.carousel-container').addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.querySelector('.carousel-container').addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                changeSlide(1); // Swipe left
+            }
+            if (touchEndX > touchStartX + 50) {
+                changeSlide(-1); // Swipe right
+            }
+        }
+    </script>
+</body>
+</html>
